@@ -1,0 +1,32 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-welcome',
+  imports: [],
+  template: `
+    <div class="card">
+      <div class="card-header">
+        {{ pageTitle }}
+      </div>
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="text-center">
+            <img
+              src="./images/logo.jpg"
+              class="img-responsive center-block"
+              style="max-height:300px;padding-bottom:50px"
+            />
+          </div>
+
+          <div class="text-center">Developed by:</div>
+          <div class="text-center">
+            <h3>Sigma Wadbude</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+})
+export class WelcomeComponent {
+  pageTitle = 'Welcome';
+}
