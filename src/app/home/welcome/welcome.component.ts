@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
         <div class="container-fluid">
           <div class="text-center">
             <img
-              src="./images/logo.jpg"
+              src="./assets/images/logo.jpg"
               class="img-responsive center-block"
               style="max-height:300px;padding-bottom:50px"
             />
