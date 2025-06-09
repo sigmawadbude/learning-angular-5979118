@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../product.service';
-import { provideHttpClient } from '@angular/common/http';
 import { By } from '@angular/platform-browser';
 import { Product } from '../product';
 import { of, throwError } from 'rxjs';
@@ -72,7 +71,7 @@ describe('ProductListComponent', () => {
     }
 
     expect(component.showImage).toBe(false);
-  })
+  });
 
   it('should toggle showImage when toggleImage is called', () => {
     component.showImage = false;
@@ -84,22 +83,24 @@ describe('ProductListComponent', () => {
 
   it('should load products and set filteredProducts on init', () => {
     component.ngOnInit();
-    expect(component.products.length).toBe(2);
-    expect(component.filteredProducts.length).toBe(2);
+    expect(component.products().length).toBe(2);
+    expect(component.filteredProducts().length).toBe(2);
   });
 
   it('should handle error in getProducts', () => {
-    mockProductService.getProducts.and.returnValue(throwError(() => 'Server error'));
+    mockProductService.getProducts.and.returnValue(
+      throwError(() => 'Server error')
+    );
     component.ngOnInit();
     expect(component.errorMessage).toBe('Server error');
   });
 
   it('should filter products by name when listFilter is set', () => {
-    component.products = mockProducts;
-    component.listFilter = 'product a';
+    component.products.set(mockProducts);
+    component.listFilter.set('product a');
 
-    expect(component.filteredProducts.length).toBe(1);
-    expect(component.filteredProducts[0].productName).toBe('Product A');
+    expect(component.filteredProducts().length).toBe(1);
+    expect(component.filteredProducts()[0].productName).toBe('Product A');
   });
 
   it('should unsubscribe on destroy', () => {
@@ -109,14 +110,13 @@ describe('ProductListComponent', () => {
   });
 
   it('should return the current list filter value via the getter', () => {
-  // Arrange
-  component.listFilter = 'test-filter';
+    // Arrange
+    component.listFilter.set('test-filter');
 
-  // Act
-  const result = component.listFilter;
+    // Act
+    const result = component.listFilter();
 
-  // Assert
-  expect(result).toBe('test-filter');
-});
-
+    // Assert
+    expect(result).toBe('test-filter');
+  });
 });
