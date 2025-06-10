@@ -118,4 +118,66 @@ describe('ProductService', () => {
 
     expect(errorMsg).toContain('Server returned code: 404');
   });
+
+  it('should create a product using POST', () => {
+    const newProduct: Product = {
+      id: '0',
+      productName: 'New Product',
+      productCode: 'NP-123',
+      tags: ['new'],
+      releaseDate: '2025-01-01',
+      price: 99,
+      description: 'A brand new product',
+      starRating: 5,
+      imageUrl: 'http://example.com/new.jpg',
+    };
+
+    service.createProduct(newProduct).subscribe((product) => {
+      expect(product).toEqual(newProduct);
+    });
+
+    const req = httpMock.expectOne('http://localhost:3000/products');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(newProduct);
+    req.flush(newProduct);
+  });
+
+  it('should delete a product using DELETE', () => {
+    const productId = '123';
+
+    service.deleteProduct(productId).subscribe((response) => {
+      expect(response).toEqual({});
+    });
+
+    const req = httpMock.expectOne(
+      `http://localhost:3000/products/${productId}`
+    );
+    expect(req.request.method).toBe('DELETE');
+    req.flush({});
+  });
+
+  it('should update a product using PUT and return updated product', () => {
+    const updatedProduct: Product = {
+      id: '123',
+      productName: 'Updated Product',
+      productCode: 'UP-123',
+      tags: ['updated'],
+      releaseDate: '2025-06-01',
+      price: 150,
+      description: 'An updated product',
+      starRating: 4,
+      imageUrl: 'http://example.com/updated.jpg',
+    };
+
+    service.updateProduct(updatedProduct).subscribe((product) => {
+      expect(product).toEqual(updatedProduct);
+    });
+
+    const req = httpMock.expectOne(
+      `http://localhost:3000/products/${updatedProduct.id}`
+    );
+    expect(req.request.method).toBe('PUT');
+    expect(req.request.body).toEqual(updatedProduct);
+    req.flush(null); // Because you're mapping to `product` manually
+  });
 });

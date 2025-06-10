@@ -57,6 +57,9 @@ describe('ProductDetailComponent', () => {
     expect(component.product()).toEqual(mockProduct);
     expect(component.errorMessage()).toBe('');
     expect(component.pageTitle()).toContain(mockProduct.productName);
+
+    component.product.set(undefined);
+    expect(component.pageTitle()).not.toContain(mockProduct.productName);
   }));
 
   it('should set errorMessage for invalid id on init', () => {
@@ -77,6 +80,16 @@ describe('ProductDetailComponent', () => {
     tick();
 
     expect(component.errorMessage()).toBe(error.message);
+    expect(component.product()).toBeUndefined();
+
+
+    mockProductService.getProduct.and.returnValue(throwError(() => ''));
+
+    component.getProduct(mockProduct.id);
+
+    tick();
+
+    expect(component.errorMessage()).toBe('Unknown error');
     expect(component.product()).toBeUndefined();
   }));
 
