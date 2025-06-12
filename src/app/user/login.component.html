@@ -1,0 +1,77 @@
+<div class="card">
+  <div class="card-header">
+    {{ pageTitle() }}
+  </div>
+
+  <div class="card-body">
+    <form novalidate (ngSubmit)="login()" [formGroup]="loginForm">
+      <fieldset>
+        <div class="row mt-2">
+          <label class="col-md-2 col-form-label" for="userNameId"
+            >User Name</label
+          >
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="userNameId"
+              type="text"
+              placeholder="User Name (required)"
+              formControlName="username"
+              [ngClass]="{ 'is-invalid': vm().displayMessage['username'] }"
+            />
+            <span class="invalid-feedback">
+              {{ vm().displayMessage["username"] }}
+            </span>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <label class="col-md-2 col-form-label" for="passwordId"
+            >Password</label
+          >
+
+          <div class="col-md-8">
+            <input
+              class="form-control"
+              id="passwordId"
+              type="password"
+              placeholder="Password (required)"
+              formControlName="password"
+              [ngClass]="{ 'is-invalid': vm().displayMessage['password'] }"
+            />
+            <span class="invalid-feedback">
+              {{ vm().displayMessage["password"] }}
+            </span>
+          </div>
+        </div>
+
+        <div class="row mt-2">
+          <div class="col-md-4 offset-md-2">
+            <button
+              class="btn btn-primary me-3"
+              type="submit"
+              style="width: 80px"
+              title="Log In"
+              [disabled]="!loginForm.valid"
+            >
+              Log In
+            </button>
+            <button
+              class="btn btn-outline-secondary"
+              type="button"
+              style="width: 80px"
+              title="Cancel Login"
+              [routerLink]="['/products']"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="errorMessage()">
+    {{ errorMessage() }}
+  </div>
+</div>

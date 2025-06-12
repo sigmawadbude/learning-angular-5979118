@@ -4,6 +4,7 @@ import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { StarComponent } from '../../shared/star.component';
 import { CurrencyPipe } from '@angular/common';
+import { query } from '@angular/animations';
 
 @Component({
   selector: 'app-product-detail',
@@ -14,6 +15,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductDetailComponent {
   readonly errorMessage = signal('');
+  showImage = signal(false);
   readonly product = signal<Product | undefined>(undefined);
 
   readonly pageTitle = computed(() =>
@@ -28,6 +30,10 @@ export class ProductDetailComponent {
 
   ngOnInit(): void {
     const param = this.route.snapshot.paramMap.get('id');
+    const query = this.route.snapshot.queryParamMap.get('showImage') === 'true';
+
+    this.showImage.set(!!query);
+    
     const isValidObjectId = param?.match(/^[a-f\d]{24}$/i);
 
     if (param && isValidObjectId) {

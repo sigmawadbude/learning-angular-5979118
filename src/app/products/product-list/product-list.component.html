@@ -32,7 +32,7 @@
                 class="btn btn-outline-primary btn-sm toggle-image"
                 (click)="toggleImage()"
               >
-                {{ showImage ? "Hide" : "Show" }} Image
+                {{ showImage() ? "Hide" : "Show" }} Image
               </button>
             </th>
             <th>Product</th>
@@ -47,7 +47,7 @@
           @for(product of filteredProducts(); track product){
           <tr>
             <td>
-              @if(showImage && product.imageUrl){
+              @if(showImage() && product.imageUrl){
               <img
                 [src]="product.imageUrl"
                 [title]="product.productName"
@@ -56,7 +56,7 @@
               />}
             </td>
             <td>
-              <a [routerLink]="['/products', product.id]">
+              <a [routerLink]="['/products', product.id]" [queryParams]="{showImage: showImage()}">
                 {{ product.productName }}
               </a>
             </td>

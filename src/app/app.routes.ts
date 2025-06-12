@@ -4,6 +4,7 @@ import { PageNotFoundComponent } from './home/page-not-found/page-not-found.comp
 import { ProductListComponent } from './products/product-list/product-list.component';
 import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { ProductEditComponent } from './products/product-edit/product-edit.component';
+import { LoginComponent } from './user/login.component';
 
 export const routes: Routes = [
   { path: 'products', component: ProductListComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
     //canDeactivate: [ProductEditGuard],
     component: ProductEditComponent,
   },
+  { path: 'login', component: LoginComponent },
   { path: 'welcome', component: WelcomeComponent },
   { path: '', redirectTo: '/welcome', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent },

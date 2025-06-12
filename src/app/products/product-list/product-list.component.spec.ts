@@ -70,15 +70,15 @@ describe('ProductListComponent', () => {
       button.triggerEventHandler('click', null); // Simulate a click event
     }
 
-    expect(component.showImage).toBe(false);
+    expect(component.showImage()).toBe(false);
   });
 
   it('should toggle showImage when toggleImage is called', () => {
-    component.showImage = false;
+    component.showImage.set(false);
     component.toggleImage();
-    expect(component.showImage).toBeTrue();
+    expect(component.showImage()).toBeTrue();
     component.toggleImage();
-    expect(component.showImage).toBeFalse();
+    expect(component.showImage()).toBeFalse();
   });
 
   it('should load products and set filteredProducts on init', () => {

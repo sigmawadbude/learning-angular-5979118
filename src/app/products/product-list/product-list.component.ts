@@ -27,7 +27,7 @@ import { CurrencyPipe } from '@angular/common';
 })
 export class ProductListComponent implements OnInit, OnDestroy {
   pageTitle = 'Product List';
-  showImage = false;
+  showImage = signal(false);
   imageWidth = 50;
   imageMargin = 2;
   errorMessage = '';
@@ -53,7 +53,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   toggleImage() {
-    this.showImage = !this.showImage;
+    this.showImage.set(!this.showImage());
   }
 
   ngOnDestroy(): void {
