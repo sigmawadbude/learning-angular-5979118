@@ -2,6 +2,7 @@ import {
   Component,
   computed,
   inject,
+  input,
   OnDestroy,
   OnInit,
   signal,
@@ -15,6 +16,7 @@ import { Subscription } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
+  selector: 'app-product-list',
   imports: [StarComponent, FormsModule, RouterLink, CurrencyPipe],
   templateUrl: './product-list.component.html',
   styles: [
@@ -26,29 +28,29 @@ import { CurrencyPipe } from '@angular/common';
   ],
 })
 export class ProductListComponent implements OnInit, OnDestroy {
-  pageTitle = 'Product List';
   showImage = signal(false);
   imageWidth = 50;
   imageMargin = 2;
-  errorMessage = '';
+  errorMessage = signal('');
   sub = new Subscription();
 
   productService = inject(ProductService);
   router = inject(Router);
 
-  listFilter = signal<string>('');
-  products = signal<Product[]>([]);
-  filteredProducts = computed(() => {
-    const filterBy = this.listFilter().toLocaleLowerCase().trim();
-    return this.products().filter((p) =>
-      p.productName.toLocaleLowerCase().includes(filterBy)
-    );
+  listFilter = input('', {
+    transform: (value: string) => value.toLocaleLowerCase(),
   });
+  products = signal<Product[]>([]);
+  filteredProducts = computed(() =>
+    this.products().filter((p) =>
+      p.productName.toLocaleLowerCase().includes(this.listFilter())
+    )
+  );
 
   ngOnInit(): void {
     this.sub = this.productService.getProducts().subscribe({
       next: (products) => this.products.set(products),
-      error: (err) => (this.errorMessage = err),
+      error: (err) => (this.errorMessage.set(err)),
     });
   }
 

@@ -5,9 +5,10 @@ import { ProductListComponent } from './products/product-list/product-list.compo
 import { ProductDetailComponent } from './products/product-detail/product-detail.component';
 import { ProductEditComponent } from './products/product-edit/product-edit.component';
 import { LoginComponent } from './user/login.component';
+import { ProductShellComponent } from './products/product-shell.component';
 
 export const routes: Routes = [
-  { path: 'products', component: ProductListComponent },
+  { path: 'products', component: ProductShellComponent },
   { path: 'products/:id', component: ProductDetailComponent },
   {
     path: 'products/:id/edit',
