@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -21,12 +22,13 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../product.service';
 import { NumberValidators } from '../../shared/number.validator';
 import { CommonModule } from '@angular/common';
+import { APP_CONSTANTS } from '../../shared/constants';
 
 @Component({
   selector: 'app-product-edit',
   imports: [ReactiveFormsModule, RouterLink, CommonModule],
   templateUrl: './product-edit.component.html',
-  styleUrl: './product-edit.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductEditComponent {
   @ViewChildren(FormControlName, { read: ElementRef })
@@ -60,19 +62,7 @@ export class ProductEditComponent {
     private router: Router,
     private productService: ProductService
   ) {
-    this.validationMessages = {
-      productName: {
-        required: 'Product name is required.',
-        minlength: 'Product name must be at least three characters.',
-        maxlength: 'Product name cannot exceed 50 characters.',
-      },
-      productCode: {
-        required: 'Product code is required.',
-      },
-      starRating: {
-        range: 'Rate the product between 1 (lowest) and 5 (highest).',
-      },
-    };
+    this.validationMessages = APP_CONSTANTS.PRODUCT_EDIT_ERR;
 
     this.genericValidator = new GenericValidator(this.validationMessages);
   }

@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -11,8 +12,6 @@ import {
   FormControl,
   FormControlName,
   FormGroup,
-  FormsModule,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -21,17 +20,19 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { GenericValidator } from '../shared/generic-validator';
 import { Observable, fromEvent, merge, debounceTime, Subscription } from 'rxjs';
+import { APP_CONSTANTS } from '../shared/constants';
 
 @Component({
   templateUrl: './login.component.html',
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements!: ElementRef[];
 
   errorMessage = signal('');
-  pageTitle = signal('Log In');
+  pageTitle = 'Log In';
   authService = inject(AuthService);
   router = inject(Router);
   loginForm!: FormGroup;
@@ -43,24 +44,12 @@ export class LoginComponent implements OnInit {
   private genericValidator: GenericValidator;
 
   readonly vm = computed(() => ({
-    pageTitle: this.pageTitle(),
     errorMessage: this.errorMessage(),
     displayMessage: this.displayMessage(),
   }));
 
   constructor() {
-    this.validationMessages = {
-      username: {
-        required: 'Username is required.',
-        minlength: 'Username must be at least 3 characters long.',
-        maxlength: 'Username cannot be longer than 20 characters.',
-      },
-      password: {
-        required: 'Password is required.',
-        minlength: 'Password must be at least 6 characters long.',
-        maxlength: 'Password cannot be longer than 20 characters.',
-      },
-    };
+    this.validationMessages = APP_CONSTANTS.LOGIN_ERR;
 
     this.genericValidator = new GenericValidator(this.validationMessages);
   }

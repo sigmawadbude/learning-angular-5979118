@@ -1,4 +1,4 @@
-import { Component, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -23,8 +23,11 @@ import { FormsModule } from '@angular/forms';
       </div>
     </div>
     }`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductFilterComponent {
   // Use Angular signal to store input value
-  filter = model('');
+  filter = model.required({
+    alias: 'filterCriteria',
+  });
 }

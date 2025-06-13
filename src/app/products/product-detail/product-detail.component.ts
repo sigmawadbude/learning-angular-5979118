@@ -4,13 +4,11 @@ import { Product } from '../product';
 import { ProductService } from '../product.service';
 import { StarComponent } from '../../shared/star.component';
 import { CurrencyPipe } from '@angular/common';
-import { query } from '@angular/animations';
 
 @Component({
   selector: 'app-product-detail',
   imports: [RouterLink, StarComponent, CurrencyPipe],
   templateUrl: './product-detail.component.html',
-  styleUrl: './product-detail.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductDetailComponent {

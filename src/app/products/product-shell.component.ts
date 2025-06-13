@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ProductListComponent } from './product-list/product-list.component';
 import { FormsModule } from '@angular/forms';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
@@ -10,12 +10,17 @@ import { ProductFilterComponent } from './product-filter/product-filter.componen
       {{ pageTitle }}
     </div>
     <div class="card-body">
-      <app-product-filter [(filter)]="listFilter"/>
-      <app-product-list [listFilter]="listFilter" />
+      <app-product-filter [filterCriteria]="listFilter()" (filterCriteriaChange)="onFilterCriteriaChange($any($event))"/>
+      <app-product-list [listFilter]="listFilter()" />
     </div>
   </div>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProductShellComponent {
   pageTitle = 'Product List';
-  listFilter = "";
+  listFilter = signal("");
+
+  onFilterCriteriaChange(value: string) {
+    this.listFilter.set(value);
+  }
 }

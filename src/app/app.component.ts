@@ -1,11 +1,10 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from './user/auth.service';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule],
   template: `
     <nav class="navbar navbar-expand navbar-light bg-light">
       <a class="navbar-brand">Hello, {{ pageTitle }}</a>
@@ -38,24 +37,30 @@ import { CommonModule } from '@angular/common';
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngIf="isLoggedIn()">
+        @if(isLoggedIn()){
+        <li class="nav-item">
           <a class="nav-link">Welcome {{ userName() }}</a>
         </li>
+        }
         <li class="nav-item">
           <a class="nav-link">Show Messages</a>
         </li>
-        <li class="nav-item" *ngIf="!isLoggedIn()">
+        @if(!isLoggedIn()){
+        <li class="nav-item">
           <a class="nav-link" routerLink="/login">Log In</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn()">
+        } @if(isLoggedIn()){
+        <li class="nav-item">
           <a class="nav-link" (click)="logOut()">Log Out</a>
         </li>
+        }
       </ul>
     </nav>
     <div class="container">
       <router-outlet></router-outlet>
     </div>
   `,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   pageTitle = 'Taksh';

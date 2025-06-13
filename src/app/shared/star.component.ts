@@ -1,12 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, model, computed, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-star',
   template: `
     <div
       class="crop"
-      [style.width.px]="starWidth"
-      [title]="rating"
+      [style.width.px]="starWidth()"
+      [title]="rating()"
       (click)="onClick()"
     >
       <div style="width: 75px">
@@ -28,17 +28,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
       }
     `,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StarComponent {
-  @Input() rating = 0;
-  starWidth = 0;
-  @Output() ratingClicked: EventEmitter<string> = new EventEmitter<string>();
-
-  ngOnChanges(): void {
-    this.starWidth = (this.rating * 75) / 5;
-  }
+  rating = model.required<number>({
+    alias: 'starRating',
+  });
+  starWidth = computed(() => (this.rating() * 75) / 5);
 
   onClick(): void {
-    this.ratingClicked.emit(`The rating ${this.rating} was clicked!`);
+    this.rating.set(2);
   }
 }

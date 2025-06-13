@@ -58,6 +58,10 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.showImage.set(!this.showImage());
   }
 
+  onratingChange(rating: number) {
+    console.log('Rating changed to:', rating);
+  }
+
   ngOnDestroy(): void {
     this.sub.unsubscribe();
   }
