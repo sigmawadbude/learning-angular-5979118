@@ -11,7 +11,7 @@ import { StarComponent } from '../../shared/star.component';
 import { Product } from '../product';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../product.service';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
 
@@ -36,6 +36,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   productService = inject(ProductService);
   router = inject(Router);
+  readonly route = inject(ActivatedRoute);
 
   listFilter = input('', {
     transform: (value: string) => value.toLocaleLowerCase(),
@@ -48,6 +49,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
   );
 
   ngOnInit(): void {
+    const query = this.route.snapshot.queryParamMap.get('showImage') === 'true';
+
+    this.showImage.set(!!query);
     this.sub = this.productService.getProducts().subscribe({
       next: (products) => this.products.set(products),
       error: (err) => (this.errorMessage.set(err)),

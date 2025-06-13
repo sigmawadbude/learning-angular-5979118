@@ -1,6 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Product } from '../product';
+import { Product, ProductResolved } from '../product';
 import { ProductService } from '../product.service';
 import { StarComponent } from '../../shared/star.component';
 import { CurrencyPipe } from '@angular/common';
@@ -9,12 +16,12 @@ import { CurrencyPipe } from '@angular/common';
   selector: 'app-product-detail',
   imports: [RouterLink, StarComponent, CurrencyPipe],
   templateUrl: './product-detail.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductDetailComponent implements OnInit {
   readonly errorMessage = signal('');
-  showImage = signal(false);
-  readonly product = signal<Product | undefined>(undefined);
+  readonly route = inject(ActivatedRoute);
+  readonly product = signal<Product | null>(null);
 
   readonly pageTitle = computed(() =>
     this.product()
@@ -22,37 +29,22 @@ export class ProductDetailComponent implements OnInit {
       : 'Product Detail'
   );
 
-  readonly route = inject(ActivatedRoute);
   readonly router = inject(Router);
   readonly productService = inject(ProductService);
 
+  showImage = signal(
+    this.route.snapshot.queryParamMap.get('showImage') === 'true'
+  );
+
   ngOnInit(): void {
-    const param = this.route.snapshot.paramMap.get('id');
-    const query = this.route.snapshot.queryParamMap.get('showImage') === 'true';
-
-    this.showImage.set(!!query);
-    
-    const isValidObjectId = param?.match(/^[a-f\d]{24}$/i);
-
-    if (param && isValidObjectId) {
-      this.getProduct(param);
-    } else {
-      this.errorMessage.set('Invalid product ID.');
-    }
-  }
-
-  getProduct(id: string): void {
-    this.errorMessage.set('');
-    this.productService.getProduct(id).subscribe({
-      next: (product) => this.product.set(product),
-      error: (err: unknown) => {
-        const message = err instanceof Error ? err.message : 'Unknown error';
-        this.errorMessage.set(message);
-      },
-    });
+    const resolvedData = this.route.snapshot.data[
+      'resolvedData'
+    ] as ProductResolved;
+    this.product.set(resolvedData.product);
+    this.errorMessage.set(resolvedData.error ?? '');
   }
 
   onBack(): void {
-    this.router.navigate(['/products']);
+    this.router.navigate(['/products'], { queryParamsHandling: 'preserve' });
   }
 }

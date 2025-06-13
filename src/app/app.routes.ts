@@ -6,10 +6,17 @@ import { ProductDetailComponent } from './products/product-detail/product-detail
 import { ProductEditComponent } from './products/product-edit/product-edit.component';
 import { LoginComponent } from './user/login.component';
 import { ProductShellComponent } from './products/product-shell.component';
+import { ProductResolver } from './services/product-resolver.service';
 
 export const routes: Routes = [
   { path: 'products', component: ProductShellComponent },
-  { path: 'products/:id', component: ProductDetailComponent },
+  {
+    path: 'products/:id',
+    component: ProductDetailComponent,
+    resolve: {
+     resolvedData: ProductResolver,
+    },
+  },
   {
     path: 'products/:id/edit',
     //canDeactivate: [ProductEditGuard],
