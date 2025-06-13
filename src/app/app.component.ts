@@ -60,6 +60,7 @@ import { AuthService } from './user/auth.service';
       <router-outlet></router-outlet>
     </div>
   `,
+  styleUrl: './app.component.css',
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {

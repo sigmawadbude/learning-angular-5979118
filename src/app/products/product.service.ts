@@ -1,4 +1,8 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, of, throwError } from 'rxjs';
 import { Product } from './product';
@@ -27,30 +31,27 @@ export class ProductService {
 
   createProduct(product: Product): Observable<Product> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<Product>(this.productsUrl, product, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http
+      .post<Product>(this.productsUrl, product, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   deleteProduct(id: string): Observable<{}> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.productsUrl}/${id}`;
-    return this.http.delete<Product>(url, { headers })
-      .pipe(
-        catchError(this.handleError)
-      );
+    return this.http
+      .delete<Product>(url, { headers })
+      .pipe(catchError(this.handleError));
   }
 
   updateProduct(product: Product): Observable<Product> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     const url = `${this.productsUrl}/${product.id}`;
-    return this.http.put<Product>(url, product, { headers })
-      .pipe(
-        // Return the product on an update
-        map(() => product),
-        catchError(this.handleError)
-      );
+    return this.http.put<Product>(url, product, { headers }).pipe(
+      // Return the product on an update
+      map(() => product),
+      catchError(this.handleError)
+    );
   }
 
   private handleError(err: HttpErrorResponse): Observable<never> {

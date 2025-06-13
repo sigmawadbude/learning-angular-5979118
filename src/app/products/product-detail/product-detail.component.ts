@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { Product } from '../product';
 import { ProductService } from '../product.service';
@@ -11,7 +11,7 @@ import { CurrencyPipe } from '@angular/common';
   templateUrl: './product-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProductDetailComponent {
+export class ProductDetailComponent implements OnInit {
   readonly errorMessage = signal('');
   showImage = signal(false);
   readonly product = signal<Product | undefined>(undefined);
