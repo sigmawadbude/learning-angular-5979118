@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   ElementRef,
+  QueryList,
   signal,
   ViewChildren,
 } from '@angular/core';
@@ -31,8 +32,10 @@ import { APP_CONSTANTS } from '../../shared/constants';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductEditComponent {
+  readonly formInputElementsSignal = signal<ElementRef[]>([]);
   @ViewChildren(FormControlName, { read: ElementRef })
-  formInputElements!: ElementRef[];
+  formInputElements!: QueryList<ElementRef>;
+
   pageTitle = signal('Product Edit');
   errorMessage = signal('');
   productForm!: FormGroup;
@@ -94,8 +97,14 @@ export class ProductEditComponent {
     this.validationSub?.unsubscribe();
   }
 
-  ngAfterViewInit(): void {
-    const controlBlurs: Observable<any>[] = this.formInputElements.map(
+  ngAfterViewInit() {
+    const updateInputs = () =>
+      this.formInputElementsSignal.set(this.formInputElements.toArray());
+
+    updateInputs();
+    this.formInputElements.changes.subscribe(updateInputs);
+
+    const controlBlurs: Observable<any>[] = this.formInputElementsSignal().map(
       (formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur')
     );
 
